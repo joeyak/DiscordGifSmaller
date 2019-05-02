@@ -8,6 +8,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"time"
 
 	"github.com/c2h5oh/datasize"
 )
@@ -21,18 +22,19 @@ type imgInfo struct {
 
 func main() {
 	for _, arg := range os.Args[1:] {
+		start := time.Now()
+
 		_, err := os.Stat(arg)
 		if err == nil {
 			fmt.Printf("Processing: %s\n", arg)
 			ext := filepath.Ext(arg)
 			err = processFile(arg, arg[:len(arg)-len(ext)]+"Small"+ext, arg, 0, 0, 0)
-			if err != nil {
-			}
 		}
 
 		if err != nil {
 			fmt.Printf("Could not process \"%s\": %v", arg, err)
 		}
+		fmt.Println("Time:", time.Since(start))
 	}
 }
 
